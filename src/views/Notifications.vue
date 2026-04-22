@@ -1,89 +1,73 @@
 <template>
   <div>
-    <v-card color="surface" rounded="xl" class="pa-4">
+    <v-card class="section-card pa-4" rounded="lg">
       <!-- Header -->
-      <div class="d-flex align-center justify-space-between mb-4 flex-wrap gap-2">
-        <div class="text-subtitle-1 font-weight-bold d-flex align-center">
-          <v-icon color="primary" class="mr-2">mdi-bell-outline</v-icon>
-          Notifications
-          <v-badge :content="unreadCount" :model-value="unreadCount > 0" color="error" class="ml-3"></v-badge>
+      <div class="d-flex align-center justify-space-between mb-4 flex-wrap" style="gap:8px">
+        <div class="d-flex align-center" style="gap:10px">
+          <span class="section-label">Notifications</span>
+          <span v-if="unreadCount > 0" class="unread-count">{{ unreadCount }}</span>
         </div>
-        <v-btn variant="tonal" color="primary" size="small" prepend-icon="mdi-check-all" @click="markAllRead">
+        <v-btn variant="text" size="small" style="font-size:11px; opacity:0.55" @click="markAllRead">
           Mark all read
         </v-btn>
       </div>
 
       <!-- Tabs -->
-      <v-tabs v-model="tab" color="primary" density="compact" class="mb-4">
-        <v-tab value="all">
-          All
-          <v-chip size="x-small" class="ml-1" color="surface" variant="outlined">{{ allNotifications.length }}</v-chip>
+      <v-tabs v-model="tab" color="primary" density="compact" class="mb-4" style="border-bottom: 1px solid rgba(255,255,255,0.06)">
+        <v-tab value="all" style="font-size:12px; text-transform:none; letter-spacing:0">
+          All <span class="tab-count">{{ allNotifications.length }}</span>
         </v-tab>
-        <v-tab v-for="cat in categories" :key="cat" :value="cat">
-          {{ cat }}
-          <v-chip size="x-small" class="ml-1" color="surface" variant="outlined">{{ countByCategory(cat) }}</v-chip>
+        <v-tab v-for="cat in categories" :key="cat" :value="cat" style="font-size:12px; text-transform:none; letter-spacing:0">
+          {{ cat }} <span class="tab-count">{{ countByCategory(cat) }}</span>
         </v-tab>
       </v-tabs>
 
       <v-window v-model="tab">
         <!-- All tab -->
         <v-window-item value="all">
-          <div v-if="allNotifications.length === 0" class="text-center text-grey py-8">
-            <v-icon size="48" class="mb-2 d-block">mdi-bell-off</v-icon>
-            No notifications
+          <div v-if="allNotifications.length === 0" class="text-center field-label py-8">No notifications</div>
+          <div
+            v-for="n in allNotifications"
+            :key="n.id"
+            class="notif-row"
+            :class="{ 'notif-unread': !n.read }"
+          >
+            <div class="d-flex align-start" style="gap:12px">
+              <v-icon size="16" :color="catHex(n.category)" style="margin-top:2px; flex-shrink:0">{{ n.icon }}</v-icon>
+              <div class="flex-grow-1">
+                <div class="notif-title" :class="{ 'notif-bold': !n.read }">{{ n.title }}</div>
+                <div class="notif-body">{{ n.body }}</div>
+              </div>
+              <div class="d-flex flex-column align-end" style="gap:4px; flex-shrink:0">
+                <div v-if="!n.read" class="unread-dot"></div>
+                <span class="notif-time">{{ formatTime(n.timestamp) }}</span>
+                <span class="cat-badge" :style="{ background: catBg(n.category), color: catHex(n.category) }">{{ n.category }}</span>
+              </div>
+            </div>
           </div>
-          <v-list lines="three" density="compact">
-            <v-list-item
-              v-for="n in allNotifications"
-              :key="n.id"
-              :prepend-icon="n.icon"
-              :active="!n.read"
-              active-color="primary"
-              class="rounded-xl mb-2"
-              style="background:rgba(255,255,255,0.03)"
-            >
-              <template v-slot:title>
-                <span :class="n.read ? 'text-medium-emphasis' : 'font-weight-bold'">{{ n.title }}</span>
-              </template>
-              <template v-slot:subtitle>
-                {{ n.body }}
-              </template>
-              <template v-slot:append>
-                <div class="d-flex flex-column align-end">
-                  <v-icon v-if="!n.read" color="primary" size="x-small" class="mb-1">mdi-circle</v-icon>
-                  <span class="text-caption text-grey">{{ formatTime(n.timestamp) }}</span>
-                  <v-chip size="x-small" :color="catColor(n.category)" variant="tonal" class="mt-1">{{ n.category }}</v-chip>
-                </div>
-              </template>
-            </v-list-item>
-          </v-list>
         </v-window-item>
 
         <!-- Category tabs -->
         <v-window-item v-for="cat in categories" :key="cat" :value="cat">
-          <v-list lines="three" density="compact">
-            <v-list-item
-              v-for="n in filteredByCategory(cat)"
-              :key="n.id"
-              :prepend-icon="n.icon"
-              :active="!n.read"
-              active-color="primary"
-              class="rounded-xl mb-2"
-              style="background:rgba(255,255,255,0.03)"
-            >
-              <template v-slot:title>
-                <span :class="n.read ? 'text-medium-emphasis' : 'font-weight-bold'">{{ n.title }}</span>
-              </template>
-              <template v-slot:subtitle>{{ n.body }}</template>
-              <template v-slot:append>
-                <div class="d-flex flex-column align-end">
-                  <v-icon v-if="!n.read" color="primary" size="x-small" class="mb-1">mdi-circle</v-icon>
-                  <span class="text-caption text-grey">{{ formatTime(n.timestamp) }}</span>
-                </div>
-              </template>
-            </v-list-item>
-          </v-list>
-          <div v-if="filteredByCategory(cat).length === 0" class="text-caption text-grey text-center py-6">No {{ cat }} notifications</div>
+          <div v-if="filteredByCategory(cat).length === 0" class="field-label text-center py-6">No {{ cat }} notifications</div>
+          <div
+            v-for="n in filteredByCategory(cat)"
+            :key="n.id"
+            class="notif-row"
+            :class="{ 'notif-unread': !n.read }"
+          >
+            <div class="d-flex align-start" style="gap:12px">
+              <v-icon size="16" :color="catHex(n.category)" style="margin-top:2px; flex-shrink:0">{{ n.icon }}</v-icon>
+              <div class="flex-grow-1">
+                <div class="notif-title" :class="{ 'notif-bold': !n.read }">{{ n.title }}</div>
+                <div class="notif-body">{{ n.body }}</div>
+              </div>
+              <div class="d-flex flex-column align-end" style="gap:4px; flex-shrink:0">
+                <div v-if="!n.read" class="unread-dot"></div>
+                <span class="notif-time">{{ formatTime(n.timestamp) }}</span>
+              </div>
+            </div>
+          </div>
         </v-window-item>
       </v-window>
     </v-card>
@@ -105,10 +89,15 @@ const countByCategory = (cat) => notifications.value.filter(n => n.category === 
 const filteredByCategory = (cat) => allNotifications.value.filter(n => n.category === cat);
 const markAllRead = () => notifications.value.forEach(n => n.read = true);
 
-const catColor = (cat) => ({
-  Announcements: 'primary', Finance: 'error', Attendance: 'warning',
-  Registration: 'success', System: 'grey',
-})[cat] ?? 'grey';
+const catHex = (cat) => ({
+  Announcements: '#5B8FD4', Finance: '#C84B5B', Attendance: '#C97A25',
+  Registration: '#3D9D5C', System: 'rgba(255,255,255,0.35)',
+})[cat] ?? 'rgba(255,255,255,0.35)';
+
+const catBg = (cat) => ({
+  Announcements: 'rgba(91,143,212,0.12)', Finance: 'rgba(200,75,91,0.12)', Attendance: 'rgba(201,122,37,0.12)',
+  Registration: 'rgba(61,157,92,0.12)', System: 'rgba(255,255,255,0.06)',
+})[cat] ?? 'rgba(255,255,255,0.06)';
 
 const formatTime = (ts) => {
   const d = new Date(ts);
@@ -119,3 +108,33 @@ const formatTime = (ts) => {
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 </script>
+
+<style scoped>
+.section-card  { border: 1px solid rgba(255,255,255,0.06); }
+.section-label { font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.87); }
+.field-label   { font-size: 10px; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.7px; }
+
+.unread-count {
+  font-size: 10px; font-weight: 700; background: #C84B5B;
+  color: #fff; padding: 2px 7px; border-radius: 10px;
+}
+.tab-count {
+  font-size: 10px; background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.4); padding: 1px 6px; border-radius: 8px;
+  margin-left: 5px;
+}
+
+/* Notification rows */
+.notif-row {
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.notif-row:last-of-type { border-bottom: none; }
+.notif-unread { background: rgba(255,255,255,0.015); border-radius: 6px; padding: 11px 8px; margin: 0 -8px; }
+.notif-title  { font-size: 13px; color: rgba(255,255,255,0.75); }
+.notif-bold   { font-weight: 600; color: rgba(255,255,255,0.9); }
+.notif-body   { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 3px; line-height: 1.4; }
+.notif-time   { font-size: 10px; color: rgba(255,255,255,0.3); white-space: nowrap; }
+.cat-badge    { font-size: 9px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; padding: 2px 6px; border-radius: 5px; white-space: nowrap; }
+.unread-dot   { width: 7px; height: 7px; border-radius: 50%; background: #5B8FD4; }
+</style>

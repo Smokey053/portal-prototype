@@ -9,7 +9,7 @@ const studentData = {
     semester: 2,
     contactNumber: "+266 59595959",
     email: "eren.yeager@students.luct.ac.ls",
-    personalEmail: "eSren.yeager@gmail.com",
+    personalEmail: "eren.yeager@gmail.com",
     address: "Shiganshina, Wall Maria South",
     nationalId: "9010190014321",
     nationality: "Mosotho",
@@ -18,20 +18,20 @@ const studentData = {
     emergencyContact: "Carla Yeager | +266 58001234 | Mother",
     advisor: "Dr. Levi Ackerman",
     enrollmentStatus: "Active",
-    enrollmentDate: "2024-01-15",
+    enrollmentDate: "2024-07-22",
   },
 
   academic: {
     weeksPerSemester: 16,
-    currentWeek: 10,
-    //  Semester 2 2026 – week 1 starts Feb 2
+    currentWeek: 11,
+    //  Semester 2 2026 – week 1 starts Feb 2 (Mon); Apr 20 = week 11
     semesterStart: "2026-02-02",
-    semesterEnd: "2026-05-23",
-    // Exam / no-class weeks
+    semesterEnd: "2026-05-29",
+    // Week 8 = mid-terms (Mar 23–27); Week 9 = semester break (Mar 30–Apr 5); Week 14 = revision; 15–16 = finals
     midTermWeek: 8,
     revisionWeek: 14,
     finalWeeks: [15, 16],
-    noClassWeeks: [8, 13, 14, 15, 16], // mid-term break=week9 (semester break), revision=14, finals=15&16
+    noClassWeeks: [9, 14, 15, 16], // 9=semester break, 14=revision, 15–16=finals
     attendanceThreshold: 80,
 
     modules: [
@@ -189,7 +189,7 @@ const studentData = {
 
     semesterHistory: [
       {
-        label: "Year 1 – Semester 1 (2024)",
+        label: "Year 1 – Semester 1 (Aug – Dec 2024)",
         gpa: 3.1,
         modules: [
           { id: "BICP1110", name: "Computer Programming I", credits: 4, grade: "B+", gradePoints: 3.3 },
@@ -200,7 +200,7 @@ const studentData = {
         ],
       },
       {
-        label: "Year 1 – Semester 2 (2024)",
+        label: "Year 1 – Semester 2 (Feb – Jun 2025)",
         gpa: 3.3,
         modules: [
           { id: "BICP1210", name: "Computer Programming II", credits: 4, grade: "A-", gradePoints: 3.7 },
@@ -211,7 +211,7 @@ const studentData = {
         ],
       },
       {
-        label: "Year 2 – Semester 1 (2025)",
+        label: "Year 2 – Semester 1 (Aug – Dec 2025)",
         gpa: 3.0,
         modules: [
           { id: "BISA2110", name: "Software Engineering I", credits: 3, grade: "A", gradePoints: 4.0 },
@@ -229,28 +229,28 @@ const studentData = {
   },
 
   finance: {
-    outstandingBalance: 4158,
-    tuitionTotal: 14158,
-    pricePerModule: 3400,
+    outstandingBalance: 4750,
+    tuitionTotal: 14750,
+    pricePerModule: 2300,
     registrationFee: 500,
-    examinationFee: 258,
+    examinationFee: 450,
     sponsorship: "Self",
     accountNumber: "LUCT-2024-901019001",
     currency: "LSL (Maloti)",
     payments: [
-      { date: "2026-01-15", amount: 5000, reference: "TXN-2026-001", method: "EFT", received: "LUCT Finance", status: "Confirmed" },
-      { date: "2026-02-10", amount: 5000, reference: "TXN-2026-002", method: "EFT", received: "LUCT Finance", status: "Confirmed" },
+      { date: "2026-01-20", amount: 5000, reference: "TXN-2026-001", method: "EFT", received: "LUCT Finance", status: "Confirmed" },
+      { date: "2026-03-10", amount: 5000, reference: "TXN-2026-002", method: "EFT", received: "LUCT Finance", status: "Confirmed" },
     ],
     pendingPayments: [
-      { dueDate: "2026-04-30", amount: 4158, description: "Outstanding Semester 2 Balance", status: "Overdue" },
+      { dueDate: "2026-04-30", amount: 4750, description: "Outstanding Semester 2 Balance", status: "Overdue" },
     ],
     feeBreakdown: [
-      { description: "Tuition (6 modules × M3400)", amount: 20400 },
+      { description: "Tuition (6 modules × M2,300)", amount: 13800 },
       { description: "Registration Fee", amount: 500 },
-      { description: "Examination Fee", amount: 258 },
-      { description: "Total Billed", amount: 14158, bold: true },
+      { description: "Examination Fee", amount: 450 },
+      { description: "Total Billed", amount: 14750, bold: true },
       { description: "Total Paid", amount: -10000, isDeduction: true },
-      { description: "Balance Due", amount: 4158, isTotal: true },
+      { description: "Balance Due", amount: 4750, isTotal: true },
     ],
   },
 
@@ -280,18 +280,18 @@ const studentData = {
     {
       id: 1,
       category: "Announcements",
-      title: "Semester Break Notice",
-      body: "The mid-semester break is scheduled for Week 9 (April 20–26). No classes will be held. Please plan accordingly.",
-      timestamp: "2026-04-14T08:00:00",
+      title: "Final Examination Timetable Published",
+      body: "The final examination timetable for Weeks 15–16 (May 18–29, 2026) has been published on the portal. Please check your exam schedule and report any clashes to Registry.",
+      timestamp: "2026-04-20T08:00:00",
       read: false,
-      icon: "mdi-calendar-remove",
+      icon: "mdi-file-document",
     },
     {
       id: 2,
       category: "Registration",
       title: "Semester 2 Registration Confirmed",
-      body: "Your module registration for Semester 2, 2026 has been successfully confirmed. You are enrolled in 6 modules.",
-      timestamp: "2026-02-01T10:30:00",
+      body: "Your module registration for Semester 2, 2026 has been successfully confirmed. You are enrolled in 6 modules totalling 19 credits.",
+      timestamp: "2026-01-21T10:30:00",
       read: true,
       icon: "mdi-check-circle",
     },
@@ -299,8 +299,8 @@ const studentData = {
       id: 3,
       category: "Finance",
       title: "Payment Receipt – TXN-2026-002",
-      body: "A payment of M5,000.00 has been received on 10 February 2026. Your current outstanding balance is M4,158.00.",
-      timestamp: "2026-02-10T14:15:00",
+      body: "A payment of M5,000.00 has been received on 10 March 2026. Your current outstanding balance is M4,750.00.",
+      timestamp: "2026-03-10T14:15:00",
       read: true,
       icon: "mdi-cash-check",
     },
@@ -308,7 +308,7 @@ const studentData = {
       id: 4,
       category: "Finance",
       title: "Outstanding Balance Reminder",
-      body: "You have an outstanding balance of M4,158.00 due by April 30, 2026. Please make payment to avoid academic hold.",
+      body: "You have an outstanding balance of M4,750.00 due by 30 April 2026. Please make payment to avoid academic hold and exam bar.",
       timestamp: "2026-04-07T09:00:00",
       read: false,
       icon: "mdi-alert-circle",
@@ -317,7 +317,7 @@ const studentData = {
       id: 5,
       category: "Attendance",
       title: "Low Attendance Warning – Cloud Computing",
-      body: "Your attendance in Cloud Computing (BICC2210) has dropped to 62%, below the 80% threshold. Immediate improvement required.",
+      body: "Your attendance in Cloud Computing (BICC2210) has dropped to 62%, below the 80% threshold. Immediate improvement required or you may be barred from the final examination.",
       timestamp: "2026-04-10T11:00:00",
       read: false,
       icon: "mdi-account-alert",
@@ -326,7 +326,7 @@ const studentData = {
       id: 6,
       category: "System",
       title: "Portal Scheduled Maintenance",
-      body: "The Student Portal will be unavailable on Sunday, April 19, 2026 from 02:00–06:00 for scheduled maintenance.",
+      body: "The Student Portal will be unavailable on Sunday, 19 April 2026 from 02:00–06:00 for scheduled maintenance.",
       timestamp: "2026-04-12T16:00:00",
       read: true,
       icon: "mdi-tools",
@@ -334,59 +334,73 @@ const studentData = {
     {
       id: 7,
       category: "Announcements",
-      title: "Mid-Term Examination Timetable",
-      body: "The mid-term examination timetable for Week 8 has been published. Please check the Academic Calendar for your exam schedule.",
-      timestamp: "2026-04-01T08:00:00",
+      title: "Mid-Term Examination Results",
+      body: "Mid-term examination results (Week 8) are now available. Log in to the Results portal to view your scores. Contact your lecturer for any queries.",
+      timestamp: "2026-04-08T08:00:00",
       read: true,
-      icon: "mdi-file-document",
+      icon: "mdi-clipboard-check",
     },
     {
       id: 8,
+      category: "Registration",
+      title: "Year 3 Registration Opens 1 July 2026",
+      body: "Registration for Year 3, Semester 1 (Academic Year 2026/27) will open on 1 July 2026 and close on 18 July 2026. Ensure all outstanding fees are cleared before the registration window opens.",
+      timestamp: "2026-04-15T09:00:00",
+      read: false,
+      icon: "mdi-calendar-clock",
+    },
+    {
+      id: 9,
       category: "Announcements",
-      title: "FICT Dean's List – Semester 1",
-      body: "Congratulations! You have been placed on the FICT Dean's List for Semester 1, 2025 with a GPA of 3.4.",
-      timestamp: "2026-01-20T12:00:00",
+      title: "Semester Break – Week 9 (Mar 30 – Apr 5)",
+      body: "The mid-semester break ran from 30 March to 5 April 2026 (Week 9). Classes resumed on Tuesday 7 April following the Easter Monday public holiday.",
+      timestamp: "2026-03-24T08:00:00",
       read: true,
-      icon: "mdi-trophy",
+      icon: "mdi-calendar-remove",
     },
   ],
 
-  // Academic Calendar – Semester 2, 2026
+  // Academic Calendar – Semester 2, 2026 (Feb 2 – May 29)
   calendarEvents: [
     // Semester start
     { date: "2026-02-02", title: "Semester 2 Begins", category: "Academic", type: "milestone" },
 
-    // Holidays
-    { date: "2026-03-11", title: "Moshoeshoe's Day", category: "Holiday", type: "holiday" },
+    // Lesotho Public Holidays (within semester)
+    { date: "2026-03-11", title: "Moshoeshoe I Day", category: "Holiday", type: "holiday" },
     { date: "2026-04-03", title: "Good Friday", category: "Holiday", type: "holiday" },
     { date: "2026-04-06", title: "Easter Monday", category: "Holiday", type: "holiday" },
-    { date: "2026-05-01", title: "May Day / Workers' Day", category: "Holiday", type: "holiday" },
+    { date: "2026-05-01", title: "May Day", category: "Holiday", type: "holiday" },
     { date: "2026-05-14", title: "Ascension Day", category: "Holiday", type: "holiday" },
-    { date: "2026-06-05", title: "Africa Heroes Day", category: "Holiday", type: "holiday" },
+    { date: "2026-05-25", title: "Africa Day", category: "Holiday", type: "holiday" },
 
-    // Mid-terms (Week 8: March 23–27)
-    { date: "2026-03-23", title: "Mid-Term Exams Begin (Week 8)", category: "Examination", type: "exam" },
-    { date: "2026-03-27", title: "Mid-Term Exams End", category: "Examination", type: "exam" },
+    // Mid-term exams (Week 8: Mar 23–27)
+    { date: "2026-03-23", title: "Mid-Term Examinations Begin (Week 8)", category: "Examination", type: "exam" },
+    { date: "2026-03-27", title: "Mid-Term Examinations End", category: "Examination", type: "exam" },
 
     // Semester break (Week 9: Mar 30 – Apr 5)
-    { date: "2026-03-30", title: "Semester Break Begins", category: "Break", type: "break" },
-    { date: "2026-04-05", title: "Semester Break Ends", category: "Break", type: "break" },
+    { date: "2026-03-30", title: "Semester Break Begins (Week 9)", category: "Break", type: "break" },
+    { date: "2026-04-05", title: "Semester Break Ends — Classes Resume Apr 7", category: "Break", type: "break" },
 
     // CA deadlines
-    { date: "2026-02-28", title: "CA1 Submission – All Modules", category: "Assessment", type: "assessment" },
+    { date: "2026-02-27", title: "CA1 Submission Deadline – All Modules", category: "Assessment", type: "assessment" },
     { date: "2026-04-17", title: "SA&D Group Assignment Due", category: "Assessment", type: "assessment" },
-    { date: "2026-04-24", title: "CA2 Submission – All Modules", category: "Assessment", type: "assessment" },
+    { date: "2026-04-24", title: "CA2 Submission Deadline – All Modules", category: "Assessment", type: "assessment" },
 
-    // Revision week (Week 14: May 4–8)
-    { date: "2026-05-04", title: "Revision Week Begins (Week 14)", category: "Break", type: "break" },
-    { date: "2026-05-08", title: "Revision Week Ends", category: "Break", type: "break" },
+    // Revision week (Week 14: May 11–15)
+    { date: "2026-05-11", title: "Revision Week Begins (Week 14)", category: "Break", type: "break" },
+    { date: "2026-05-15", title: "Revision Week Ends", category: "Break", type: "break" },
 
-    // Final exams (Weeks 15–16: May 11–22)
-    { date: "2026-05-11", title: "Final Examinations Begin (Week 15)", category: "Examination", type: "exam" },
-    { date: "2026-05-22", title: "Final Examinations End (Week 16)", category: "Examination", type: "exam" },
+    // Final exams (Weeks 15–16: May 18–29)
+    { date: "2026-05-18", title: "Final Examinations Begin (Week 15)", category: "Examination", type: "exam" },
+    { date: "2026-05-29", title: "Final Examinations End (Week 16)", category: "Examination", type: "exam" },
 
     // Semester end
-    { date: "2026-05-23", title: "Semester 2 Ends", category: "Academic", type: "milestone" },
+    { date: "2026-05-30", title: "Semester 2 Ends", category: "Academic", type: "milestone" },
+
+    // Year 3 Registration (July)
+    { date: "2026-07-01", title: "Year 3 Registration Opens", category: "Registration", type: "milestone" },
+    { date: "2026-07-18", title: "Year 3 Registration Deadline", category: "Registration", type: "milestone" },
+    { date: "2026-08-03", title: "Year 3 Semester 1 Begins", category: "Academic", type: "milestone" },
   ],
 
   supportTickets: [
@@ -422,21 +436,28 @@ const studentData = {
     },
   ],
 
-  // Registration data for next semester
+  // Registration history – LUCT Lesotho registers in July (Sem 1) and January (Sem 2)
+  registrationHistory: [
+    { term: "JAN 2026", label: "Year 2 \u2022 Semester 2 (Feb \u2013 May 2026)", submitted: "21 January 2026 at 09:12", status: "Registered" },
+    { term: "JUL 2025", label: "Year 2 \u2022 Semester 1 (Aug \u2013 Dec 2025)", submitted: "14 July 2025 at 08:30",    status: "Registered" },
+    { term: "JAN 2025", label: "Year 1 \u2022 Semester 2 (Feb \u2013 May 2025)", submitted: "20 January 2025 at 07:14", status: "Registered" },
+    { term: "JUL 2024", label: "Year 1 \u2022 Semester 1 (Aug \u2013 Dec 2024)", submitted: "15 July 2024 at 10:22",    status: "Registered" },
+  ],
+
+  // Year 3 registration not yet open – opens 1 July 2026
   registrationStatus: {
-    isOpen: true,
-    deadline: "2026-04-30",
-    semester: "Year 2 – Semester 2, 2026",
-    nextSemester: "Year 3 – Semester 1, 2026/27",
-    currentModules: ["BISA2210", "BIOP2210", "BIDB2210", "BICM2210", "BICC2210", "BIPS2210"],
+    isOpen: false,
+    opensDate: "1 July 2026",
+    deadline: "18 July 2026",
+    nextSemester: "Year 3 \u2013 Semester 1, 2026/27",
     availableModules: [
-      { id: "BISE3110", name: "Software Engineering II", credits: 3, prereq: "BISA2110", seats: 32, enrolled: false, required: true },
-      { id: "BISC3110", name: "Security & Cryptography", credits: 3, prereq: "BINW2110", seats: 28, enrolled: false, required: true },
-      { id: "BIAI3110", name: "Artificial Intelligence", credits: 3, prereq: "BICP2110", seats: 15, enrolled: false, required: true },
-      { id: "BIMB3110", name: "Mobile App Development", credits: 3, prereq: "BIOP2110", seats: 20, enrolled: false, required: true },
-      { id: "BIVR3110", name: "VR & Immersive Media", credits: 3, prereq: "BIGR2110", seats: 18, enrolled: false, required: false },
-      { id: "BIPM3110", name: "Project Management", credits: 3, prereq: "None", seats: 35, enrolled: false, required: false },
-      { id: "BIMA2110", name: "Calculus 2", credits: 3, prereq: "None", seats: 22, enrolled: false, required: true, type: "repeat" },
+      { id: "BIPS3110", name: "Probability and Statistics II",  credits: 3, prereq: "BIPS2210", seats: 32, enrolled: false, required: true },
+      { id: "BIHC3110", name: "Human-Computer Interaction",     credits: 3, prereq: "BISA2210", seats: 28, enrolled: false, required: true },
+      { id: "BINX3110", name: "Network Security",               credits: 3, prereq: "BINW2110", seats: 24, enrolled: false, required: true },
+      { id: "BIMB3110", name: "Mobile Application Development", credits: 3, prereq: "BIOP2210", seats: 20, enrolled: false, required: true },
+      { id: "BIMM3110", name: "Interactive Multimedia Systems", credits: 3, prereq: "BIGR2110", seats: 18, enrolled: false, required: false },
+      { id: "BIPM3110", name: "Project Management",             credits: 3, prereq: "None",     seats: 35, enrolled: false, required: false },
+      { id: "BIMA2110", name: "Calculus 2",                     credits: 3, prereq: "None",     seats: 22, enrolled: false, required: true, type: "repeat" },
     ],
   },
 };

@@ -1,152 +1,125 @@
 <template>
   <div>
     <!-- Profile Header -->
-    <v-card color="surface" rounded="xl" class="pa-5 mb-5">
-      <v-row align="center">
-        <v-col cols="auto">
-          <v-avatar size="80" color="primary">
-            <span class="text-h4 font-weight-bold text-white">EY</span>
-          </v-avatar>
-        </v-col>
-        <v-col>
-          <div class="text-h5 font-weight-bold">{{ student.profile.name }}</div>
-          <div class="text-body-2 text-medium-emphasis">{{ student.profile.studentId }}</div>
-          <div class="text-caption text-grey">{{ student.profile.programme }}</div>
-          <v-chip size="x-small" color="success" class="mt-2" prepend-icon="mdi-check-circle">{{ student.profile.enrollmentStatus }}</v-chip>
-        </v-col>
-        <v-col cols="12" sm="auto">
-          <v-btn color="primary" variant="tonal" prepend-icon="mdi-pencil" size="small">Edit Photo</v-btn>
-        </v-col>
-      </v-row>
+    <v-card color="surface" rounded="lg" class="pa-5 mb-4 header-card">
+      <div class="d-flex align-start" style="gap:20px">
+        <v-avatar size="88" rounded="lg" color="primary">
+          <span class="text-h3 font-weight-bold text-white">EY</span>
+        </v-avatar>
+        <div style="flex:1; min-width:0">
+          <div class="text-h5 font-weight-bold mb-2">{{ student.profile.name }}</div>
+          <div class="d-flex align-center flex-wrap mb-2" style="gap:10px">
+            <v-chip size="x-small" variant="outlined" prepend-icon="mdi-identifier" class="id-chip">
+              {{ student.profile.studentId }}
+            </v-chip>
+            <span class="text-caption text-medium-emphasis">{{ student.profile.email }}</span>
+          </div>
+          <div class="d-flex align-center flex-wrap" style="gap:16px">
+            <span class="meta-item"><v-icon size="13">mdi-gender-male-female</v-icon>{{ student.profile.gender }}</span>
+            <span class="meta-item"><v-icon size="13">mdi-cake-variant-outline</v-icon>{{ student.profile.dateOfBirth }}</span>
+            <span class="meta-item"><v-icon size="13">mdi-phone-outline</v-icon>{{ student.profile.contactNumber }}</span>
+          </div>
+        </div>
+        <v-chip size="x-small" color="success" variant="flat" class="mt-1 status-chip">
+          {{ student.profile.enrollmentStatus }}
+        </v-chip>
+      </div>
     </v-card>
 
     <v-row>
       <!-- Personal Info -->
       <v-col cols="12" md="6">
-        <v-card color="surface" rounded="xl" class="pa-5 h-100">
-          <div class="text-subtitle-1 font-weight-bold mb-4 d-flex align-center">
-            <v-icon color="primary" class="mr-2">mdi-account</v-icon>
-            Personal Information
-            <v-spacer></v-spacer>
+        <v-card color="surface" rounded="lg" class="pa-5 h-100 section-card">
+          <div class="d-flex align-center justify-space-between mb-4">
+            <div class="section-title">Personal Information</div>
             <v-btn
               v-if="!editMode"
               size="small"
-              variant="tonal"
+              variant="text"
               color="primary"
-              prepend-icon="mdi-pencil"
+              prepend-icon="mdi-pencil-outline"
+              class="edit-btn"
               @click="editMode = true"
             >Edit</v-btn>
           </div>
 
           <!-- Display Mode -->
-          <v-list v-if="!editMode" density="compact" lines="two">
-            <v-list-item prepend-icon="mdi-account" subtitle="Full Name" :title="form.name" class="rounded-lg mb-1" style="background:rgba(255,255,255,0.03)"></v-list-item>
-            <v-list-item prepend-icon="mdi-identifier" subtitle="Student ID" :title="student.profile.studentId" class="rounded-lg mb-1" style="background:rgba(255,255,255,0.03)"></v-list-item>
-            <v-list-item prepend-icon="mdi-card-account-details" subtitle="National ID" :title="student.profile.nationalId" class="rounded-lg mb-1" style="background:rgba(255,255,255,0.03)"></v-list-item>
-            <v-list-item prepend-icon="mdi-phone" subtitle="Contact Number" :title="form.contactNumber" class="rounded-lg mb-1" style="background:rgba(255,255,255,0.03)"></v-list-item>
-            <v-list-item prepend-icon="mdi-email" subtitle="Personal Email" :title="form.personalEmail" class="rounded-lg mb-1" style="background:rgba(255,255,255,0.03)"></v-list-item>
-            <v-list-item prepend-icon="mdi-map-marker" subtitle="Physical Address" :title="form.address" class="rounded-lg mb-1" style="background:rgba(255,255,255,0.03)"></v-list-item>
-            <v-list-item prepend-icon="mdi-cake" subtitle="Date of Birth" :title="student.profile.dateOfBirth" class="rounded-lg mb-1" style="background:rgba(255,255,255,0.03)"></v-list-item>
-            <v-list-item prepend-icon="mdi-flag" subtitle="Nationality" :title="student.profile.nationality" class="rounded-lg mb-1" style="background:rgba(255,255,255,0.03)"></v-list-item>
-            <v-list-item prepend-icon="mdi-account-heart" subtitle="Emergency Contact" :title="form.emergencyContact" class="rounded-lg mb-1" style="background:rgba(255,255,255,0.03)"></v-list-item>
-          </v-list>
+          <template v-if="!editMode">
+            <div class="info-grid">
+              <div class="info-field">
+                <div class="field-label">Student Number</div>
+                <div class="field-value">{{ student.profile.studentId }}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">Full Name</div>
+                <div class="field-value">{{ form.name }}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">National ID</div>
+                <div class="field-value">{{ student.profile.nationalId }}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">Date of Birth</div>
+                <div class="field-value">{{ student.profile.dateOfBirth }}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">Gender</div>
+                <div class="field-value">{{ student.profile.gender }}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">Nationality</div>
+                <div class="field-value">{{ student.profile.nationality }}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">Contact Number</div>
+                <div class="field-value">{{ form.contactNumber }}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">Personal Email</div>
+                <div class="field-value">{{ form.personalEmail }}</div>
+              </div>
+            </div>
+            <v-divider class="my-4"></v-divider>
+            <div class="info-grid">
+              <div class="info-field" style="grid-column: 1 / -1">
+                <div class="field-label">Physical Address</div>
+                <div class="field-value">{{ form.address }}</div>
+              </div>
+              <div class="info-field" style="grid-column: 1 / -1">
+                <div class="field-label">Emergency Contact</div>
+                <div class="field-value">{{ form.emergencyContact }}</div>
+              </div>
+            </div>
+          </template>
 
           <!-- Edit Mode -->
           <v-form v-else @submit.prevent="saveProfile">
             <v-row dense>
               <v-col cols="12">
-                <v-text-field
-                  label="Full Name"
-                  v-model="form.name"
-                  variant="outlined"
-                  density="compact"
-                  prepend-inner-icon="mdi-account"
-                ></v-text-field>
+                <v-text-field label="Full Name" v-model="form.name" variant="outlined" density="compact"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field
-                  label="Student ID"
-                  :model-value="student.profile.studentId"
-                  variant="outlined"
-                  density="compact"
-                  readonly
-                  prepend-inner-icon="mdi-identifier"
-                  hint="Read-only"
-                  persistent-hint
-                ></v-text-field>
+                <v-text-field label="Student ID" :model-value="student.profile.studentId" variant="outlined" density="compact" readonly hint="Read-only" persistent-hint></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field
-                  label="National ID"
-                  :model-value="student.profile.nationalId"
-                  variant="outlined"
-                  density="compact"
-                  readonly
-                  prepend-inner-icon="mdi-card-account-details"
-                  hint="Read-only"
-                  persistent-hint
-                ></v-text-field>
+                <v-text-field label="National ID" :model-value="student.profile.nationalId" variant="outlined" density="compact" readonly hint="Read-only" persistent-hint></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field
-                  label="Contact Number"
-                  v-model="form.contactNumber"
-                  variant="outlined"
-                  density="compact"
-                  prepend-inner-icon="mdi-phone"
-                ></v-text-field>
+                <v-text-field label="Contact Number" v-model="form.contactNumber" variant="outlined" density="compact"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field
-                  label="Personal Email"
-                  v-model="form.personalEmail"
-                  variant="outlined"
-                  density="compact"
-                  prepend-inner-icon="mdi-email"
-                ></v-text-field>
+                <v-text-field label="Personal Email" v-model="form.personalEmail" variant="outlined" density="compact"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Physical Address"
-                  v-model="form.address"
-                  variant="outlined"
-                  density="compact"
-                  prepend-inner-icon="mdi-map-marker"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  label="Date of Birth"
-                  :model-value="student.profile.dateOfBirth"
-                  variant="outlined"
-                  density="compact"
-                  readonly
-                  prepend-inner-icon="mdi-cake"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  label="Nationality"
-                  :model-value="student.profile.nationality"
-                  variant="outlined"
-                  density="compact"
-                  readonly
-                  prepend-inner-icon="mdi-flag"
-                ></v-text-field>
+                <v-text-field label="Physical Address" v-model="form.address" variant="outlined" density="compact"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Emergency Contact"
-                  v-model="form.emergencyContact"
-                  variant="outlined"
-                  density="compact"
-                  prepend-inner-icon="mdi-account-heart"
-                ></v-text-field>
+                <v-text-field label="Emergency Contact" v-model="form.emergencyContact" variant="outlined" density="compact"></v-text-field>
               </v-col>
             </v-row>
-            <div class="d-flex justify-end mt-3 gap-2">
-              <v-btn variant="text" @click="cancelEdit">Cancel</v-btn>
-              <v-btn color="primary" prepend-icon="mdi-content-save" type="submit">Save Changes</v-btn>
+            <div class="d-flex justify-end mt-3" style="gap:8px">
+              <v-btn variant="text" size="small" @click="cancelEdit">Cancel</v-btn>
+              <v-btn color="primary" size="small" prepend-icon="mdi-content-save" type="submit">Save</v-btn>
             </div>
           </v-form>
         </v-card>
@@ -154,50 +127,64 @@
 
       <!-- Academic Info -->
       <v-col cols="12" md="6">
-        <v-card color="surface" rounded="xl" class="pa-5 mb-4">
-          <div class="text-subtitle-1 font-weight-bold mb-4 d-flex align-center">
-            <v-icon color="secondary" class="mr-2">mdi-school</v-icon>
-            Academic Details
+        <v-card color="surface" rounded="lg" class="pa-5 mb-4 section-card">
+          <div class="d-flex align-center justify-space-between mb-4">
+            <div class="section-title">Academic Information</div>
+            <v-chip size="x-small" color="success" variant="flat" class="status-chip">{{ student.profile.enrollmentStatus }}</v-chip>
           </div>
-          <v-list density="compact" lines="two">
-            <v-list-item
-              v-for="item in academicItems"
-              :key="item.label"
-              :prepend-icon="item.icon"
-              :subtitle="item.label"
-              :title="item.value"
-              class="rounded-lg mb-1"
-              style="background:rgba(255,255,255,0.03)"
-            ></v-list-item>
-          </v-list>
-          <v-alert type="info" variant="tonal" density="compact" class="mt-4 text-caption" icon="mdi-lock">
-            Academic records are managed by the Registry. Contact <strong>registry@luct.ac.ls</strong> for changes.
-          </v-alert>
+
+          <div class="mb-4">
+            <div class="text-body-2 font-weight-semibold text-primary mb-1">{{ student.profile.programme }}</div>
+            <div class="text-caption text-medium-emphasis">{{ student.profile.faculty }}</div>
+          </div>
+          <v-divider class="mb-4"></v-divider>
+
+          <div class="info-grid mb-4">
+            <div class="info-field">
+              <div class="field-label">Year of Study</div>
+              <div class="field-value">Year {{ student.profile.year }}</div>
+            </div>
+            <div class="info-field">
+              <div class="field-label">Current Semester</div>
+              <div class="field-value">Semester {{ student.profile.semester }}</div>
+            </div>
+            <div class="info-field">
+              <div class="field-label">Enrollment Date</div>
+              <div class="field-value">{{ student.profile.enrollmentDate }}</div>
+            </div>
+            <div class="info-field">
+              <div class="field-label">Advisor</div>
+              <div class="field-value">{{ student.profile.advisor }}</div>
+            </div>
+            <div class="info-field" style="grid-column: 1 / -1">
+              <div class="field-label">University Email</div>
+              <div class="field-value">{{ student.profile.email }}</div>
+            </div>
+          </div>
+
+          <div class="notice-box">
+            <v-icon size="14" class="mr-1" style="opacity:0.5">mdi-lock-outline</v-icon>
+            <span>Academic records are managed by the Registry. Contact <strong>registry@luct.ac.ls</strong> for changes.</span>
+          </div>
         </v-card>
 
-        <!-- University Email -->
-        <v-card color="surface" rounded="xl" class="pa-5">
-          <div class="text-subtitle-1 font-weight-bold mb-3 d-flex align-center">
-            <v-icon color="info" class="mr-2">mdi-email-lock</v-icon>
-            University Account
+        <!-- Sponsorship -->
+        <v-card color="surface" rounded="lg" class="pa-5 section-card">
+          <div class="section-title mb-4">Sponsorship Information</div>
+          <div class="sponsor-list">
+            <div class="sponsor-row">
+              <span class="field-label">Sponsor</span>
+              <span class="field-value">{{ student.finance.sponsorship }}</span>
+            </div>
+            <div class="sponsor-row">
+              <span class="field-label">Account Number</span>
+              <span class="field-value">{{ student.finance.accountNumber }}</span>
+            </div>
+            <div class="sponsor-row">
+              <span class="field-label">Currency</span>
+              <span class="field-value">{{ student.finance.currency }}</span>
+            </div>
           </div>
-          <v-text-field
-            label="University Email (read-only)"
-            :model-value="student.profile.email"
-            variant="outlined"
-            density="compact"
-            readonly
-            prepend-inner-icon="mdi-email-outline"
-            class="mb-3"
-          ></v-text-field>
-          <v-text-field
-            label="Assigned Advisor"
-            :model-value="student.profile.advisor"
-            variant="outlined"
-            density="compact"
-            readonly
-            prepend-inner-icon="mdi-account-tie"
-          ></v-text-field>
         </v-card>
       </v-col>
     </v-row>
@@ -224,15 +211,6 @@ const form = ref({
 const snack = ref(false);
 const editMode = ref(false);
 
-const academicItems = [
-  { label: 'Faculty', value: student.profile.faculty, icon: 'mdi-domain' },
-  { label: 'Programme', value: student.profile.programme, icon: 'mdi-book-education' },
-  { label: 'Year of Study', value: `Year ${student.profile.year}`, icon: 'mdi-counter' },
-  { label: 'Current Semester', value: `Semester ${student.profile.semester}`, icon: 'mdi-calendar-range' },
-  { label: 'Enrollment Date', value: student.profile.enrollmentDate, icon: 'mdi-calendar-check' },
-  { label: 'Sponsorship', value: student.finance.sponsorship, icon: 'mdi-cash-multiple' },
-];
-
 const saveProfile = () => { snack.value = true; editMode.value = false; };
 const cancelEdit = () => {
   form.value = {
@@ -245,3 +223,82 @@ const cancelEdit = () => {
   editMode.value = false;
 };
 </script>
+
+<style scoped>
+.header-card { border: 1px solid rgba(255,255,255,0.07); }
+.section-card { border: 1px solid rgba(255,255,255,0.06); }
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.3px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}
+
+.id-chip { font-size: 11px !important; }
+
+.status-chip {
+  font-size: 10px !important;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.edit-btn { font-size: 12px !important; }
+
+/* Info grid – 2-column label/value pairs */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 28px;
+}
+
+.field-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.38);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 3px;
+}
+
+.field-value {
+  font-size: 13px;
+  color: rgba(255,255,255,0.87);
+  font-weight: 400;
+  word-break: break-word;
+}
+
+/* Sponsorship section – label left, value right */
+.sponsor-list { display: flex; flex-direction: column; gap: 14px; }
+.sponsor-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding-bottom: 10px;
+}
+.sponsor-row:last-child { border-bottom: none; padding-bottom: 0; }
+.sponsor-row .field-label { font-size: 12px; color: rgba(255,255,255,0.45); }
+.sponsor-row .field-value { font-size: 13px; color: rgba(255,255,255,0.87); }
+
+/* Notice box */
+.notice-box {
+  display: flex;
+  align-items: flex-start;
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 10px 12px;
+  line-height: 1.5;
+}
+</style>

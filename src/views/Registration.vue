@@ -1,93 +1,110 @@
 <template>
   <div>
-    <!-- Status Banner -->
-    <v-alert
-      :type="student.registrationStatus.isOpen ? 'success' : 'error'"
-      variant="tonal"
-      border="start"
-      class="mb-4 rounded-xl"
-      :icon="student.registrationStatus.isOpen ? 'mdi-check-circle' : 'mdi-lock'"
-    >
-      <strong>Registration is {{ student.registrationStatus.isOpen ? 'OPEN' : 'CLOSED' }}</strong>
-      for {{ student.registrationStatus.nextSemester }}.
-      <span v-if="student.registrationStatus.isOpen">
-        Deadline: <strong>{{ student.registrationStatus.deadline }}</strong>
-      </span>
-    </v-alert>
+    <!-- Past Registration Requests -->
+    <div class="section-label mb-2">Registration Requests</div>
+    <div class="text-caption text-medium-emphasis mb-4">View and track all your registration requests and their current status</div>
+    <v-divider class="mb-4"></v-divider>
+
+    <v-row dense class="mb-6">
+      <v-col cols="12" sm="6" v-for="reg in student.registrationHistory" :key="reg.term">
+        <div class="reg-card">
+          <div class="d-flex align-center justify-space-between mb-2">
+            <div class="d-flex align-center" style="gap:10px">
+              <div class="reg-icon-box"><v-icon size="15">mdi-calendar-month-outline</v-icon></div>
+              <span class="reg-term">{{ reg.term }}</span>
+            </div>
+            <span class="reg-badge">{{ reg.status.toUpperCase() }}</span>
+          </div>
+          <div class="reg-label mb-3">{{ reg.label }}</div>
+          <div class="d-flex align-center justify-space-between">
+            <span class="reg-submitted">Submitted: {{ reg.submitted }}</span>
+            <span class="reg-link">View Details <v-icon size="12">mdi-chevron-right</v-icon></span>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+
+    <!-- Upcoming Registration Status -->
+    <v-card color="surface" rounded="lg" class="pa-4 mb-5 section-card">
+      <div class="d-flex align-center justify-space-between">
+        <div>
+          <div class="section-title mb-1">Next Semester Registration</div>
+          <div class="text-caption text-medium-emphasis">{{ student.registrationStatus.nextSemester }}</div>
+        </div>
+        <v-chip
+          size="small"
+          :color="student.registrationStatus.isOpen ? 'success' : 'warning'"
+          variant="flat"
+          class="status-chip"
+        >{{ student.registrationStatus.isOpen ? 'OPEN' : 'NOT YET OPEN' }}</v-chip>
+      </div>
+      <v-divider class="my-3"></v-divider>
+      <div class="d-flex align-center" style="gap:24px">
+        <div>
+          <div class="field-label">{{ student.registrationStatus.isOpen ? 'Deadline' : 'Opens' }}</div>
+          <div class="field-value">{{ student.registrationStatus.isOpen ? student.registrationStatus.deadline : student.registrationStatus.opensDate }}</div>
+        </div>
+        <div v-if="!student.registrationStatus.isOpen">
+          <div class="field-label">Registration Deadline</div>
+          <div class="field-value">{{ student.registrationStatus.deadline }}</div>
+        </div>
+        <div>
+          <div class="field-label">Semester</div>
+          <div class="field-value">{{ student.registrationStatus.nextSemester }}</div>
+        </div>
+      </div>
+      <div v-if="!student.registrationStatus.isOpen" class="notice-box mt-3">
+        <v-icon size="13" class="mr-2" style="opacity:0.5; flex-shrink:0">mdi-information-outline</v-icon>
+        Registration is not yet open. You may preview the available Year 3 modules below. Enrolment will be enabled from {{ student.registrationStatus.opensDate }}.
+      </div>
+    </v-card>
 
     <v-row>
-      <!-- Current Registration -->
+      <!-- Current Enrolment -->
       <v-col cols="12" md="5">
-        <v-card color="surface" rounded="xl" class="pa-4 h-100">
-          <div class="text-subtitle-1 font-weight-bold mb-3 d-flex align-center">
-            <v-icon color="secondary" class="mr-2" size="20">mdi-check-decagram</v-icon>
-            Currently Enrolled — Sem 2
+        <v-card color="surface" rounded="lg" class="pa-4 h-100 section-card">
+          <div class="section-title mb-3">Currently Enrolled — Sem 2</div>
+          <div v-for="mod in student.academic.modules" :key="mod.id" class="enrol-row">
+            <div style="flex:1; min-width:0">
+              <div class="field-value">{{ mod.name }}</div>
+              <div class="field-label mt-1">{{ mod.id }} &bull; {{ mod.credits }} credits</div>
+            </div>
+            <span class="badge-enrolled">Enrolled</span>
           </div>
-          <v-list density="compact">
-            <v-list-item
-              v-for="mod in student.academic.modules"
-              :key="mod.id"
-              :title="mod.name"
-              :subtitle="mod.id + ' · ' + mod.credits + ' credits'"
-              prepend-icon="mdi-book-check"
-              color="success"
-              class="rounded-lg mb-1"
-              style="background:rgba(76,175,80,0.07)"
-            >
-              <template v-slot:append>
-                <v-chip size="x-small" color="success" variant="tonal">Enrolled</v-chip>
-              </template>
-            </v-list-item>
-          </v-list>
           <v-divider class="my-3"></v-divider>
-          <div class="text-caption text-grey">
-            Total credits this semester:
-            <strong>{{ totalCurrentCredits }}</strong>
-          </div>
+          <div class="field-label">Total credits: <span class="field-value">{{ totalCurrentCredits }}</span></div>
         </v-card>
       </v-col>
 
-      <!-- Available Modules for Next Semester -->
+      <!-- Available Modules -->
       <v-col cols="12" md="7">
-        <v-card color="surface" rounded="xl" class="pa-4">
-          <div class="text-subtitle-1 font-weight-bold mb-3 d-flex align-center">
-            <v-icon color="primary" class="mr-2" size="20">mdi-pencil-box-outline</v-icon>
-            Available — {{ student.registrationStatus.nextSemester }}
-          </div>
+        <v-card color="surface" rounded="lg" class="pa-4 section-card">
+          <div class="section-title mb-3">Available — {{ student.registrationStatus.nextSemester }}</div>
 
           <v-table density="compact" hover>
             <thead>
               <tr>
-                <th>Code</th>
-                <th>Module Name</th>
-                <th class="text-center">Credits</th>
-                <th class="text-center">Seats</th>
-                <th class="text-center">Required</th>
-                <th class="text-center">Action</th>
+                <th class="tbl-head">Code</th>
+                <th class="tbl-head">Module Name</th>
+                <th class="tbl-head text-center">Credits</th>
+                <th class="tbl-head text-center">Seats</th>
+                <th class="tbl-head text-center">Required</th>
+                <th class="tbl-head text-center">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="mod in regularModules" :key="mod.id">
-                <td class="text-caption">{{ mod.id }}</td>
-                <td class="text-caption">{{ mod.name }}</td>
-                <td class="text-center text-caption">{{ mod.credits }}</td>
+              <tr v-for="mod in regularModules" :key="mod.id" class="tbl-row">
+                <td class="tbl-cell mono">{{ mod.id }}</td>
+                <td class="tbl-cell">{{ mod.name }}</td>
+                <td class="tbl-cell text-center">{{ mod.credits }}</td>
                 <td class="text-center">
-                  <v-chip size="x-small" :color="mod.seats <= 5 ? 'error' : mod.seats <= 15 ? 'warning' : 'success'" variant="tonal">
-                    {{ mod.seats }}
-                  </v-chip>
+                  <span class="seats-badge" :class="mod.seats <= 5 ? 'seats-low' : mod.seats <= 15 ? 'seats-med' : 'seats-ok'">{{ mod.seats }}</span>
                 </td>
                 <td class="text-center">
-                  <v-icon :color="mod.required ? 'error' : 'grey'" size="16">
-                    {{ mod.required ? 'mdi-asterisk' : 'mdi-minus' }}
-                  </v-icon>
+                  <v-icon :color="mod.required ? 'error' : 'grey'" size="14">{{ mod.required ? 'mdi-asterisk' : 'mdi-minus' }}</v-icon>
                 </td>
                 <td class="text-center">
-                  <v-btn
-                    size="x-small"
-                    :color="mod.enrolled ? 'error' : 'primary'"
-                    :variant="mod.enrolled ? 'tonal' : 'elevated'"
-                    @click="toggleEnrol(mod)"
-                  >
+                  <v-btn size="x-small" :color="mod.enrolled ? 'error' : 'primary'" :variant="mod.enrolled ? 'tonal' : 'elevated'" :disabled="!student.registrationStatus.isOpen" @click="toggleEnrol(mod)">
                     {{ mod.enrolled ? 'Drop' : 'Enrol' }}
                   </v-btn>
                 </td>
@@ -96,71 +113,54 @@
           </v-table>
 
           <v-divider class="my-3"></v-divider>
-
-          <!-- Summary of selections -->
           <div class="d-flex align-center justify-space-between">
-            <div class="text-caption">
-              Selected: <strong>{{ enrolledCount }}</strong> module(s) &bull;
-              <strong>{{ enrolledCredits }}</strong> credits
+            <div class="field-label">
+              Selected: <span class="field-value">{{ enrolledCount }}</span> module(s) &bull;
+              <span class="field-value">{{ enrolledCredits }}</span> credits
             </div>
-            <v-btn
-              color="primary"
-              size="small"
-              prepend-icon="mdi-send"
-              :disabled="enrolledCount === 0"
-              @click="submitRegistration"
-            >Submit Registration</v-btn>
+            <v-btn color="primary" size="small" variant="flat" prepend-icon="mdi-send" :disabled="enrolledCount === 0 || !student.registrationStatus.isOpen" @click="submitRegistration">
+              Submit
+            </v-btn>
           </div>
         </v-card>
       </v-col>
     </v-row>
-
-    <!-- Confirmation snackbar -->
-    <v-snackbar v-model="snack" color="success" timeout="3000" location="bottom right">
-      <v-icon class="mr-2">mdi-check</v-icon> Registration submitted successfully!
-    </v-snackbar>
 
     <!-- Repeat Modules -->
     <v-row v-if="repeatModules.length > 0" class="mt-4">
       <v-col cols="12">
-        <v-card color="surface" rounded="xl" class="pa-4">
-          <div class="text-subtitle-1 font-weight-bold mb-3 d-flex align-center">
-            <v-icon color="warning" class="mr-2" size="20">mdi-refresh-circle</v-icon>
-            Repeat Module(s) — {{ student.registrationStatus.nextSemester }}
+        <v-card color="surface" rounded="lg" class="pa-4 section-card">
+          <div class="d-flex align-center justify-space-between mb-3">
+            <div class="section-title">Repeat Module(s) — {{ student.registrationStatus.nextSemester }}</div>
+            <v-chip size="x-small" color="warning" variant="flat" class="status-chip">Action Required</v-chip>
           </div>
-          <v-alert type="warning" variant="tonal" density="compact" class="mb-3 text-caption" icon="mdi-alert-circle-outline">
-            The following module(s) were not passed and <strong>must be repeated</strong> in the next academic year.
-          </v-alert>
+          <div class="notice-box mb-3">
+            <v-icon size="13" class="mr-1" style="opacity:0.5">mdi-alert-circle-outline</v-icon>
+            The following module(s) were not passed and must be repeated in the next academic year.
+          </div>
           <v-table density="compact" hover>
             <thead>
               <tr>
-                <th>Code</th>
-                <th>Module Name</th>
-                <th class="text-center">Credits</th>
-                <th class="text-center">Seats</th>
-                <th class="text-center">Action</th>
+                <th class="tbl-head">Code</th>
+                <th class="tbl-head">Module Name</th>
+                <th class="tbl-head text-center">Credits</th>
+                <th class="tbl-head text-center">Seats</th>
+                <th class="tbl-head text-center">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="mod in repeatModules" :key="mod.id">
-                <td class="text-caption">{{ mod.id }}</td>
-                <td class="text-caption">
+              <tr v-for="mod in repeatModules" :key="mod.id" class="tbl-row">
+                <td class="tbl-cell mono">{{ mod.id }}</td>
+                <td class="tbl-cell">
                   {{ mod.name }}
-                  <v-chip size="x-small" color="warning" variant="tonal" class="ml-2">Repeat</v-chip>
+                  <span class="repeat-tag ml-1">REPEAT</span>
                 </td>
-                <td class="text-center text-caption">{{ mod.credits }}</td>
+                <td class="tbl-cell text-center">{{ mod.credits }}</td>
                 <td class="text-center">
-                  <v-chip size="x-small" :color="mod.seats <= 5 ? 'error' : mod.seats <= 15 ? 'warning' : 'success'" variant="tonal">
-                    {{ mod.seats }}
-                  </v-chip>
+                  <span class="seats-badge" :class="mod.seats <= 5 ? 'seats-low' : mod.seats <= 15 ? 'seats-med' : 'seats-ok'">{{ mod.seats }}</span>
                 </td>
                 <td class="text-center">
-                  <v-btn
-                    size="x-small"
-                    :color="mod.enrolled ? 'error' : 'warning'"
-                    :variant="mod.enrolled ? 'tonal' : 'elevated'"
-                    @click="toggleEnrol(mod)"
-                  >
+                  <v-btn size="x-small" :color="mod.enrolled ? 'error' : 'warning'" :variant="mod.enrolled ? 'tonal' : 'elevated'" :disabled="!student.registrationStatus.isOpen" @click="toggleEnrol(mod)">
                     {{ mod.enrolled ? 'Drop' : 'Enrol' }}
                   </v-btn>
                 </td>
@@ -170,6 +170,11 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <!-- Snackbar -->
+    <v-snackbar v-model="snack" color="success" timeout="3000" location="bottom right">
+      <v-icon class="mr-2">mdi-check</v-icon> Registration submitted successfully!
+    </v-snackbar>
   </div>
 </template>
 
@@ -189,3 +194,73 @@ const enrolledCredits = computed(() => student.registrationStatus.availableModul
 const toggleEnrol = (mod) => { mod.enrolled = !mod.enrolled; };
 const submitRegistration = () => { snack.value = true; };
 </script>
+
+<style scoped>
+.section-card { border: 1px solid rgba(255,255,255,0.06); }
+.section-label { font-size: 20px; font-weight: 700; color: rgba(255,255,255,0.9); }
+.section-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.65); }
+.field-label { font-size: 10px; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.7px; }
+.field-value { font-size: 13px; color: rgba(255,255,255,0.87); }
+.status-chip { font-size: 10px !important; font-weight: 600; letter-spacing: 0.5px; }
+
+/* Registration history cards */
+.reg-card {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,0.02);
+}
+.reg-icon-box {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.5);
+}
+.reg-term { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.87); }
+.reg-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; color: #3D9D5C; }
+.reg-label { font-size: 13px; color: rgba(255,255,255,0.6); }
+.reg-submitted { font-size: 11px; color: rgba(255,255,255,0.38); }
+.reg-link { font-size: 11px; color: rgba(255,255,255,0.45); display: flex; align-items: center; cursor: pointer; }
+.reg-link:hover { color: #5B8FD4; }
+
+/* Enrolled rows */
+.enrol-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.enrol-row:last-of-type { border-bottom: none; }
+.badge-enrolled {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+  color: #3D9D5C; background: rgba(61,157,92,0.12);
+  padding: 3px 8px; border-radius: 6px;
+  flex-shrink: 0;
+}
+
+/* Table styles */
+.tbl-head { font-size: 11px !important; color: rgba(255,255,255,0.38) !important; font-weight: 600 !important; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px !important; }
+.tbl-row { border-bottom: 1px solid rgba(255,255,255,0.04) !important; }
+.tbl-cell { font-size: 12px !important; color: rgba(255,255,255,0.75) !important; padding: 8px 12px !important; }
+.mono { font-family: 'Roboto Mono', monospace; font-size: 11px !important; color: rgba(255,255,255,0.45) !important; }
+
+.seats-badge { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 6px; }
+.seats-ok  { background: rgba(61,157,92,0.15); color: #3D9D5C; }
+.seats-med { background: rgba(201,122,37,0.15); color: #C97A25; }
+.seats-low { background: rgba(200,75,91,0.15); color: #C84B5B; }
+
+.repeat-tag {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.6px;
+  color: #C97A25; background: rgba(201,122,37,0.15);
+  padding: 2px 5px; border-radius: 4px;
+}
+
+.notice-box {
+  display: flex; align-items: flex-start;
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+</style>

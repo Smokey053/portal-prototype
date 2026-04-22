@@ -3,11 +3,8 @@
     <v-row>
       <!-- Submit Ticket -->
       <v-col cols="12" md="5">
-        <v-card color="surface" rounded="xl" class="pa-5">
-          <div class="text-subtitle-1 font-weight-bold mb-4 d-flex align-center">
-            <v-icon color="primary" class="mr-2">mdi-ticket-outline</v-icon>
-            Submit a Support Ticket
-          </div>
+        <v-card class="section-card pa-4 mb-4" rounded="lg">
+          <div class="section-title mb-4">Submit a Support Ticket</div>
           <v-form @submit.prevent="submitTicket">
             <v-select
               v-model="form.category"
@@ -15,7 +12,6 @@
               :items="['Finance', 'Registry', 'IT Support', 'Academic', 'Library', 'Other']"
               variant="outlined"
               density="compact"
-              prepend-inner-icon="mdi-tag"
               class="mb-3"
             ></v-select>
             <v-select
@@ -24,7 +20,6 @@
               :items="['Low', 'Medium', 'High']"
               variant="outlined"
               density="compact"
-              prepend-inner-icon="mdi-flag"
               class="mb-3"
             ></v-select>
             <v-text-field
@@ -32,7 +27,6 @@
               label="Subject"
               variant="outlined"
               density="compact"
-              prepend-inner-icon="mdi-text-short"
               class="mb-3"
               counter="100"
               maxlength="100"
@@ -43,7 +37,6 @@
               variant="outlined"
               density="compact"
               rows="4"
-              prepend-inner-icon="mdi-text"
               class="mb-3"
             ></v-textarea>
             <v-file-input
@@ -56,22 +49,19 @@
               class="mb-4"
               accept="image/*,.pdf,.docx"
             ></v-file-input>
-            <v-btn block color="primary" prepend-icon="mdi-send" type="submit" :disabled="!form.subject || !form.category">
+            <v-btn block color="primary" type="submit" :disabled="!form.subject || !form.category" size="small">
               Submit Ticket
             </v-btn>
           </v-form>
         </v-card>
 
         <!-- FAQ -->
-        <v-card color="surface" rounded="xl" class="pa-4 mt-4">
-          <div class="text-subtitle-2 font-weight-bold mb-3 d-flex align-center">
-            <v-icon color="secondary" class="mr-2" size="18">mdi-help-circle</v-icon>
-            Quick Help
-          </div>
+        <v-card class="section-card pa-4" rounded="lg">
+          <div class="section-title mb-3">Quick Help</div>
           <v-expansion-panels variant="accordion">
             <v-expansion-panel v-for="faq in faqs" :key="faq.q" bg-color="transparent" rounded="lg">
-              <v-expansion-panel-title class="text-caption">{{ faq.q }}</v-expansion-panel-title>
-              <v-expansion-panel-text class="text-caption text-medium-emphasis">{{ faq.a }}</v-expansion-panel-text>
+              <v-expansion-panel-title style="font-size:12px; color:rgba(255,255,255,0.65)">{{ faq.q }}</v-expansion-panel-title>
+              <v-expansion-panel-text style="font-size:12px; color:rgba(255,255,255,0.4)">{{ faq.a }}</v-expansion-panel-text>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-card>
@@ -79,48 +69,42 @@
 
       <!-- My Tickets -->
       <v-col cols="12" md="7">
-        <v-card color="surface" rounded="xl" class="pa-4">
-          <div class="text-subtitle-1 font-weight-bold mb-3 d-flex align-center">
-            <v-icon color="warning" class="mr-2">mdi-ticket-confirmation</v-icon>
-            My Tickets
-          </div>
+        <v-card class="section-card pa-4 mb-4" rounded="lg">
+          <div class="section-title mb-3">My Tickets</div>
 
-          <v-card
+          <div
             v-for="ticket in allTickets"
             :key="ticket.id"
-            variant="tonal"
-            :color="statusColor(ticket.status)"
-            rounded="xl"
-            class="pa-4 mb-3"
+            class="ticket-row"
           >
-            <div class="d-flex align-start justify-space-between flex-wrap gap-2">
+            <div class="d-flex align-start justify-space-between flex-wrap" style="gap:8px">
               <div class="flex-grow-1">
-                <div class="text-body-2 font-weight-bold">{{ ticket.subject }}</div>
-                <div class="text-caption text-grey mt-1">{{ ticket.id }} &bull; {{ ticket.category }} &bull; {{ ticket.createdDate }}</div>
-                <div class="text-caption mt-1">{{ ticket.description }}</div>
+                <div class="ticket-subject">{{ ticket.subject }}</div>
+                <div class="field-label mt-1">{{ ticket.id }} &bull; {{ ticket.category }} &bull; {{ ticket.createdDate }}</div>
+                <div class="ticket-desc mt-1">{{ ticket.description }}</div>
               </div>
-              <div class="text-right">
-                <v-chip size="x-small" :color="statusColor(ticket.status)" variant="elevated">{{ ticket.status }}</v-chip>
-                <div class="text-caption text-grey mt-1">Updated: {{ ticket.lastUpdated }}</div>
+              <div class="text-right" style="flex-shrink:0">
+                <span class="status-badge" :class="statusClass(ticket.status)">{{ ticket.status }}</span>
+                <div class="field-label mt-2">Updated: {{ ticket.lastUpdated }}</div>
               </div>
             </div>
-            <div class="d-flex justify-end mt-2">
-              <v-btn size="x-small" variant="text" color="primary" prepend-icon="mdi-eye">View Details</v-btn>
-              <v-btn v-if="ticket.status !== 'Resolved'" size="x-small" variant="text" color="warning" prepend-icon="mdi-comment">Add Comment</v-btn>
+            <div class="d-flex justify-end mt-2" style="gap:4px">
+              <v-btn size="x-small" variant="text" color="primary" style="font-size:11px">View Details</v-btn>
+              <v-btn v-if="ticket.status !== 'Resolved'" size="x-small" variant="text" style="font-size:11px; opacity:0.6">Add Comment</v-btn>
             </div>
-          </v-card>
+          </div>
         </v-card>
 
-        <!-- Contact Info -->
-        <v-card color="surface" rounded="xl" class="pa-4 mt-4">
-          <div class="text-subtitle-2 font-weight-bold mb-3">Direct Contacts</div>
+        <!-- Direct Contacts -->
+        <v-card class="section-card pa-4" rounded="lg">
+          <div class="section-title mb-3">Direct Contacts</div>
           <v-row dense>
             <v-col v-for="dept in departments" :key="dept.name" cols="12" sm="6">
-              <div class="d-flex align-center pa-3 rounded-lg" style="background:rgba(255,255,255,0.03)">
-                <v-icon :color="dept.color" class="mr-3" size="20">{{ dept.icon }}</v-icon>
+              <div class="dept-row">
+                <v-icon :color="dept.color" size="16" class="mr-2" style="flex-shrink:0">{{ dept.icon }}</v-icon>
                 <div>
-                  <div class="text-caption font-weight-bold">{{ dept.name }}</div>
-                  <div class="text-caption text-grey">{{ dept.email }}</div>
+                  <div class="dept-name">{{ dept.name }}</div>
+                  <div class="field-label">{{ dept.email }}</div>
                 </div>
               </div>
             </v-col>
@@ -145,7 +129,7 @@ const allTickets = ref([...student.supportTickets]);
 
 const form = ref({ category: '', priority: 'Medium', subject: '', description: '', attachment: null });
 
-const statusColor = (s) => ({ 'In Progress': 'warning', 'Resolved': 'success', 'Open': 'info' })[s] ?? 'grey';
+const statusClass = (s) => ({ 'In Progress': 'status-warning', 'Resolved': 'status-success', 'Open': 'status-info' })[s] ?? '';
 
 const submitTicket = () => {
   allTickets.value.unshift({
@@ -175,3 +159,35 @@ const departments = [
   { name: 'Academic',  email: 'academic@luct.ac.ls',     icon: 'mdi-school',         color: 'warning' },
 ];
 </script>
+
+<style scoped>
+.section-card  { border: 1px solid rgba(255,255,255,0.06); }
+.section-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.65); }
+.field-label   { font-size: 10px; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.7px; }
+
+/* Ticket rows */
+.ticket-row {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.ticket-row:last-of-type { border-bottom: none; }
+.ticket-subject { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.87); }
+.ticket-desc    { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.4; }
+
+/* Status badges */
+.status-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; }
+.status-success { background: rgba(61,157,92,0.15);  color: #3D9D5C; }
+.status-warning { background: rgba(201,122,37,0.15); color: #C97A25; }
+.status-info    { background: rgba(91,143,212,0.15); color: #5B8FD4; }
+
+/* Dept rows */
+.dept-row {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+.dept-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); }
+</style>
